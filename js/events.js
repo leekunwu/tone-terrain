@@ -17,13 +17,42 @@ const mw=$('#mapw');['dragover','dragenter'].forEach(n=>mw.addEventListener(n,e=
 ['dragleave','drop'].forEach(n=>mw.addEventListener(n,e=>{e.preventDefault();mw.classList.remove('dz')}));
 mw.addEventListener('drop',e=>{if(e.dataTransfer.files.length)stage(e.dataTransfer.files)});
 const hxp=document.createElement('div');hxp.id='hxp';document.body.appendChild(hxp);
-function hxShow(w){hxp.innerHTML=`<b>${esc(w.dataset.t)}</b>`+hx0(JSON.parse(w.dataset.v),'big',130,1);hxp.style.display='block';const r=w.getBoundingClientRect(),h=hxp.offsetHeight,wd=hxp.offsetWidth;
- hxp.style.left=Math.max(8,r.left-wd-8)+'px';hxp.style.top=Math.max(8,Math.min(innerHeight-h-8,r.top+r.height/2-h/2))+'px'}
-const hxHide=()=>{hxp.style.display='none'};
-function hxOpen(w,e){hxHide();dlg.innerHTML=`<b>${esc(w.dataset.t)}</b><div style="text-align:center">${hx0(JSON.parse(w.dataset.v),'big',210,1)}</div><div class="bt"><button data-act="x">닫기</button></div>`;
- dlg.classList.remove('zin');if(!dlg.open)dlg.showModal();const r=dlg.getBoundingClientRect(),x=e.clientX||r.left+r.width/2,y=e.clientY||r.top+r.height/2;dlg.style.transformOrigin=`${x-r.left}px ${y-r.top}px`;void dlg.offsetWidth;dlg.classList.add('zin')}
-sd.addEventListener('mouseover',e=>{const w=e.target.closest('.hxw');if(w)hxShow(w)});sd.addEventListener('mouseout',e=>{if(e.target.closest('.hxw'))hxHide()});
-sd.addEventListener('focusin',e=>{const w=e.target.closest('.hxw');if(w)hxShow(w)});sd.addEventListener('focusout',hxHide);
+// Suppress restored focus/hover until the user leaves the enlarged chart.
+let hxBlocked=null;
+function hxShow(w){
+ if(dlg.open||w===hxBlocked)return;
+ hxp.innerHTML=`<b>${esc(w.dataset.t)}</b>`+hx0(JSON.parse(w.dataset.v),'big',130,1);
+ hxp.style.display='block';
+ const r=w.getBoundingClientRect(),h=hxp.offsetHeight,wd=hxp.offsetWidth;
+ const left=r.right+8+wd<=innerWidth-8?r.right+8:r.left-wd-8;
+ hxp.style.left=Math.max(8,Math.min(innerWidth-wd-8,left))+'px';
+ hxp.style.top=Math.max(8,Math.min(innerHeight-h-8,r.top+r.height/2-h/2))+'px';
+}
+function hxHide(){hxp.style.display='none'}
+function hxOpen(w,e){
+ hxBlocked=w;hxHide();
+ dlg.innerHTML=`<b>${esc(w.dataset.t)}</b><div style="text-align:center">${hx0(JSON.parse(w.dataset.v),'big',210,1)}</div><div class="bt"><button data-act="x">닫기</button></div>`;
+ dlg.classList.remove('zin');if(!dlg.open)dlg.showModal();
+ const r=dlg.getBoundingClientRect(),x=e.clientX||r.left+r.width/2,y=e.clientY||r.top+r.height/2;
+ dlg.style.transformOrigin=`${x-r.left}px ${y-r.top}px`;void dlg.offsetWidth;dlg.classList.add('zin');
+}
+dlg.addEventListener('close',hxHide);
+dlg.addEventListener('cancel',hxHide);
+// Ignore bubbling between SVG children of the same chart.
+sd.addEventListener('mouseover',e=>{
+ const w=e.target.closest('.hxw');
+ if(w&&!w.contains(e.relatedTarget))hxShow(w);
+});
+sd.addEventListener('mouseout',e=>{
+ const w=e.target.closest('.hxw');
+ if(w&&!w.contains(e.relatedTarget)){hxHide();if(!dlg.open&&hxBlocked===w)hxBlocked=null;}
+});
+sd.addEventListener('focusin',e=>{const w=e.target.closest('.hxw');if(w)hxShow(w)});
+sd.addEventListener('focusout',e=>{
+ hxHide();if(!dlg.open&&hxBlocked===e.target.closest('.hxw'))hxBlocked=null;
+});
+sd.addEventListener('scroll',hxHide);
+window.addEventListener('resize',hxHide);
 sd.addEventListener('click',e=>{const w=e.target.closest('.hxw');if(w)hxOpen(w,e)});
 sd.addEventListener('keydown',e=>{const w=e.target.closest('.hxw');if(w&&(e.key=='Enter'||e.key==' ')){e.preventDefault();hxOpen(w,e)}});
 render();

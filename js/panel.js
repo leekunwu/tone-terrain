@@ -1,10 +1,10 @@
 // ---- 패널
-function hx0(v,cls='',z=95,lab=0){const c=z,R=z-(lab?38:24),pt=(i,r)=>{const t=-Math.PI/2+i*Math.PI/3;return[c+r*Math.cos(t),c+r*Math.sin(t)]};
+function hx0(v,cls='',z=95,lab=0){const c=z,R=z-(lab?64:24),pt=(i,r)=>{const t=-Math.PI/2+i*Math.PI/3;return[c+r*Math.cos(t),c+r*Math.sin(t)]};
  let s=`<svg class="${cls}" width="${z*2}" height="${z*2}" viewBox="0 0 ${z*2} ${z*2}" role="img" aria-label="육각형 프로필">`;
  [50,100].forEach(r=>s+=`<polygon class="g" points="${AX.map((_,i)=>pt(i,R*r/100).join(',')).join(' ')}"/>`);
- AX.forEach((a,i)=>{const[x,y]=pt(i,R),[tx,ty]=pt(i,R+12);s+=`<line class="g" x1="${c}" y1="${c}" x2="${x}" y2="${y}"/><text class="hl" x="${tx}" y="${ty+3}" text-anchor="middle">${lab?a:a.slice(0,3)}</text>`});
+ AX.forEach((a,i)=>{const[x,y]=pt(i,R),[tx,ty]=pt(i,R+12);s+=`<line class="g" x1="${c}" y1="${c}" x2="${x}" y2="${y}"/><text class="hl" x="${tx}" y="${ty+3}" text-anchor="middle">${lab?a:a.slice(0,3)}${lab?`<tspan class="vl" x="${tx}" dy="16">${f1(v[i])}</tspan>`:''}</text>`});
  const P=v.map((x,i)=>x==null?null:pt(i,R*x/100).join(',')).filter(Boolean);
- if(P.length>2)s+=`<polygon class="v" points="${P.join(' ')}"/>`;else P.forEach(p=>{const[x,y]=p.split(',');s+=`<circle class="v" cx="${x}" cy="${y}" r="3"/>`});if(lab)v.forEach((x,i)=>{if(x==null)return;const[px,py]=pt(i,R*x/100),[lx,ly]=pt(i,R+26);s+=`<circle class="v" cx="${px}" cy="${py}" r="3"/><text class="vl" x="${lx}" y="${ly+4}" text-anchor="middle">${f1(x)}</text>`});return s+'</svg>'}
+ if(P.length>2)s+=`<polygon class="v" points="${P.join(' ')}"/>`;else P.forEach(p=>{const[x,y]=p.split(',');s+=`<circle class="v" cx="${x}" cy="${y}" r="3"/>`});if(lab)v.forEach((x,i)=>{if(x==null)return;const[px,py]=pt(i,R*x/100),[lx,ly]=pt(i,R+26);s+=`<circle class="v" cx="${px}" cy="${py}" r="3"/>`});return s+'</svg>'}
 const hex=(v,cls,z,t)=>`<span class="hxw" tabindex="0" role="button" aria-label="${esc(t)} 육각형 크게 보기" data-t="${esc(t)}" data-v="${esc(JSON.stringify(v))}">${hx0(v,cls,z)}</span>`;
 const f1=v=>v==null?'—':(Math.round(v*10)/10).toFixed(1);
 function albStats(g){return M.map(k=>{const a=g.t.map(t=>t.m[k]).filter(v=>v!=null);return{k,v:a.length?avg(a):null,n:a.length}})}
@@ -34,7 +34,7 @@ function compare(){const gs=A.cmp.map(k=>B.G.find(g=>g.key==k)).filter(Boolean);
 function history(){const ks=Object.keys(B.st);if(!ks.length)return'';
  return`<details><summary>가져오기 내역</summary>${ks.map(f=>{const s=B.st[f],ex=Object.entries(s.ex);return`<p class="sm"><b>${esc(f)}</b><br>행 ${s.rows} · 앨범 반영 ${s.ok} · 중복 제외 ${s.dup} · 충돌 ${s.conf} · 무효 지표 ${s.bad}${ex.length?'<br>앨범 제외: '+ex.map(([k,n])=>esc(k)+' '+n).join(', '):''}</p>`}).join('')}
  ${B.ev.length?`<div class="sm"><b>충돌 (기존 값 유지)</b><table><tr><th>트랙/지표</th><th>유지</th><th>새 값</th></tr>${B.ev.slice(0,40).map(e=>`<tr><td>${esc(e.tid)} ${esc(e.k)}</td><td>${e.a??'결측'}</td><td>${e.b??'결측'}</td></tr>`).join('')}</table>${B.ev.length>40?'외 '+(B.ev.length-40)+'건':''}<div class="mu">${esc(B.ev[0].f)} 등 출처 파일 기준</div></div>`:''}</details>`}
-function render(){const has=A.rows.length>0;$('#drop').innerHTML=has?'':'<h2>Tone Terrain</h2><div class="mu">CSV 파일 놓기</div><button class="p" data-act="pick">파일 선택</button>';
+function render(){hxHide();const has=A.rows.length>0;$('#drop').innerHTML=has?'':'<h2>Tone Terrain</h2><div class="mu">CSV 파일 놓기</div><button class="p" data-act="pick">파일 선택</button>';
  ['x','y','z'].forEach(a=>{const e=$('#s'+a);e.innerHTML=M.map(k=>`<option>${esc(k)}</option>`).join('');e.value=A[a];[...e.options].forEach(o=>o.disabled=['x','y','z'].some(b=>b!=a&&A[b]==o.value))});
  document.querySelectorAll('[data-act=v]').forEach(b=>{b.classList.toggle('on',b.dataset.v==A.view);b.setAttribute('aria-pressed',b.dataset.v==A.view)});
  if(A.hl&&!(B.G.some(g=>g.key==A.hl)||B.S.some(o=>o.id==A.hl)))A.hl=null;draw3d();const V=vis();let p='';
