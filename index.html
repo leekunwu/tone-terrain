@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><title>Tone Terrain</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="styles.css"></head><body><div id="app">
+<header><h1>Tone Terrain</h1>
+<button id="add" class="p">파일 추가</button>
+<div class="seg" role="group" aria-label="보기"><button data-act="v" data-v="album">앨범</button><button data-act="v" data-v="song">곡</button></div>
+<label class="axl">X<select id="sx"></select></label><label class="axl">Y<select id="sy"></select></label><label class="axl">Z<select id="sz"></select></label>
+<button data-act="reset">전체 보기</button>
+<input type="search" id="q" placeholder="곡명·앨범명·Artist 검색" aria-label="검색">
+<span class="sp"></span>
+<a class="btn spot" href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a>
+<a class="btn chos" href="https://www.chosic.com/spotify-playlist-exporter/" target="_blank" rel="noopener noreferrer">Chosic</a>
+<button data-act="proj">프로젝트</button><button data-act="help">도움말</button>
+<input type="file" id="fi" accept=".csv,text/csv" multiple hidden></header>
+<main><div id="mapw"><canvas id="map" tabindex="0" aria-label="Tone Terrain 3D 지도. 드래그로 회전, 휠로 확대, 방향키로 회전"></canvas><div id="tip"></div><div id="drop"></div></div>
+<aside id="side"></aside></main></div><dialog id="dlg"></dialog>
+<script src="js/state.js"></script>
+<script src="js/csv.js"></script>
+<script src="js/data.js"></script>
+<script src="js/map.js"></script>
+<script src="js/panel.js"></script>
+<script src="js/import.js"></script>
+<script src="js/project.js"></script>
+<script src="js/events.js"></script></body></html>
