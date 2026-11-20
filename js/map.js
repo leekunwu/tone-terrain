@@ -10,7 +10,7 @@ const sphIn=()=>{const s=A.sph,c=s&&cen(s.id);return c?inside(vis().map(x=>({id:
 function size(){const r=cv.getBoundingClientRect();A.d=devicePixelRatio||1;cv.width=r.width*A.d;cv.height=r.height*A.d;A.w=r.width;A.h=r.height}
 new ResizeObserver(()=>{size();draw3d()}).observe(cv.parentNode);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>draw3d());
-function pj(p){const{yaw,pit,zm,px=0,py=0}=A.cam,cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pit),sp=Math.sin(pit);
+function pj(p){p=qr(A.qt,p);const{yaw,pit,zm,px=0,py=0}=A.cam,cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pit),sp=Math.sin(pit);
  const x=p[0]*cy+p[2]*sy,z0=-p[0]*sy+p[2]*cy,y=p[1]*cp-z0*sp,z=p[1]*sp+z0*cp,f=5/(5-z)*zm,s=Math.min(A.w,A.h)*.3;return{x:A.w/2+px+x*s*f,y:A.h/2+py-y*s*f,z,f}}
 function draw3d(){if(!A.w)size();const c=g2,d=A.d;c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,A.w,A.h);
  const ln=cs('--ln2'),mu=cs('--mu'),ac=cs('--ac'),dot=cs('--dot'),bg=cs('--pn'),tx=cs('--tx'),CC=['',cs('--c1'),cs('--c2'),cs('--c3')],ff='"SUIT Variable",system-ui,sans-serif';
@@ -25,24 +25,28 @@ function draw3d(){if(!A.w)size();const c=g2,d=A.d;c.setTransform(d,0,0,d,0,0);c.
  const okk=r=>r.m[kx]!=null&&r.m[ky]!=null&&r.m[kz]!=null,P3=r=>[nm(kx,r.m[kx]),nm(ky,r.m[ky]),nm(kz,r.m[kz])],alb=A.view=='album';
  if(alb)V.forEach(g=>{const S=g.t.filter(okk);if(S.length){const Q=S.map(P3);it.push({id:g.key,rp:pj([0,1,2].map(i=>avg(Q.map(q=>q[i])))),S:Q.map(pj)})}});
  else V.forEach(o=>{if(okk(o.r))it.push({id:o.id,rp:pj(P3(o.r)),S:[]})});
- A.nvalid=it.length;A.pts=[];it.sort((a,b)=>a.rp.z-b.rp.z);
- const SC=A.sph&&cen(A.sph.id),IN=SC&&new Set(sphIn().map(o=>o.id));
+ A.nvalid=it.length;A.pts=[];const FS=new Set(A.flags);it.sort((a,b)=>(FS.has(a.id)-FS.has(b.id))||a.rp.z-b.rp.z); // 플래그 항목은 맨 위에 그린다
+ const SC=A.sph&&cen(A.sph.id),IN=SC&&new Set(sphIn().map(o=>o.id)),inV=new Set(it.map(o=>o.id));
  if(SC){const p=pj(SC),R=(1-A.sph.r/100)*DM*Math.min(A.w,A.h)*.3*p.f;c.fillStyle=ac;c.globalAlpha=.08;c.beginPath();c.arc(p.x,p.y,R,0,7);c.fill();
   c.strokeStyle=ac;c.globalAlpha=.7;c.lineWidth=1.5;c.setLineDash([5,4]);c.stroke();c.setLineDash([]);
   c.globalAlpha=.3;c.lineWidth=1;c.beginPath();c.ellipse(p.x,p.y,R,R*Math.abs(Math.sin(A.cam.pit)),0,0,7);c.stroke();
   c.globalAlpha=1;c.fillStyle=tx;c.font='700 11px '+ff;c.textAlign='center';c.fillText('유사도 '+A.sph.r+'% 이상 · '+IN.size,p.x,p.y-R-6)}
+ if(A.ax){c.strokeStyle=ac;c.lineWidth=1;c.globalAlpha=.22;c.setLineDash([3,4]);A.flags.forEach(id=>{const q=cen(id);if(q)[0,1,2].forEach(i=>{const a=[...q],b=[...q];a[i]=-1;b[i]=1;const s=pj(a),e=pj(b);c.beginPath();c.moveTo(s.x,s.y);c.lineTo(e.x,e.y);c.stroke()})});c.setLineDash([]);c.globalAlpha=1}
  const ra=Math.min(1,T/.35),sa=Math.min(1,Math.max(0,(T-.3)/.4));
- const hv=A.hl&&it.some(o=>o.id==A.hl);it.forEach(o=>{const sl=A.sel&&(A.sel.k==o.id||A.sel.s==o.id||A.sel.from==o.id),h=A.hl==o.id,ci=A.cmp.indexOf(o.id)+1,dim=(hv&&!h&&!sl)||(IN&&!IN.has(o.id)&&o.id!=A.sph.id&&!h&&!sl),col=ci?CC[ci]:sl||h?ac:dot,al=dim?.2:1;
+ const hv=A.hl&&it.some(o=>o.id==A.hl);it.forEach(o=>{const sl=A.sel&&(A.sel.k==o.id||A.sel.s==o.id||A.sel.from==o.id),h=A.hl==o.id,ci=A.cmp.indexOf(o.id)+1,fg=A.flags.includes(o.id),dim=(hv&&!h&&!sl&&!fg)||(IN&&!IN.has(o.id)&&o.id!=A.sph.id&&!h&&!sl&&!fg),col=ci?CC[ci]:sl||h||fg?ac:dot,al=dim?.2:1;
   if(o.S.length&&(sl||h||ci)){c.strokeStyle=col;c.lineWidth=1;c.globalAlpha=.35*sa;c.beginPath();o.S.forEach(s=>{c.moveTo(o.rp.x,o.rp.y);c.lineTo(s.x,s.y)});c.stroke()}
   c.fillStyle=col;c.globalAlpha=.75*al*sa;o.S.forEach(s=>{c.beginPath();c.arc(s.x,s.y,2.6*s.f,0,7);c.fill()});
   c.globalAlpha=al*ra;const r=(alb?6.5:5)*o.rp.f;c.beginPath();c.arc(o.rp.x,o.rp.y,r,0,7);c.fill();c.strokeStyle=bg;c.lineWidth=1.5;c.stroke();
   if(sl||h){c.strokeStyle=col;c.lineWidth=2;c.globalAlpha=.5;c.beginPath();c.arc(o.rp.x,o.rp.y,r+4,0,7);c.stroke()}
   if(ci){c.globalAlpha=1;c.fillStyle=tx;c.font='700 12px '+ff;c.textAlign='left';c.fillText(ci,o.rp.x+r+4,o.rp.y-r);c.textAlign='center'}
-  if(A.flags.includes(o.id)){c.globalAlpha=al*ra;c.fillStyle=tx;c.font='700 14px '+ff;c.textAlign='center';c.fillText('★',o.rp.x,o.rp.y-r-5)}
   c.globalAlpha=1;A.pts.push({id:o.id,x:o.rp.x,y:o.rp.y})});
  if(A.sel&&A.sel.s){const o=B.S.find(x=>x.id==A.sel.s);if(o&&okk(o.r)){const p=pj(P3(o.r)),R0=24*p.f;c.fillStyle=ac;c.strokeStyle=ac;c.globalAlpha=.16;c.beginPath();c.arc(p.x,p.y,R0,0,7);c.fill();
   c.globalAlpha=.9;c.lineWidth=2;c.beginPath();c.arc(p.x,p.y,R0,0,7);c.stroke();c.globalAlpha=.4;c.lineWidth=1;c.beginPath();c.ellipse(p.x,p.y,R0,R0*.35,0,0,7);c.stroke();
   c.globalAlpha=1;c.beginPath();c.arc(p.x,p.y,4*p.f,0,7);c.fill();c.fillStyle=tx;c.font='700 12px '+ff;c.fillText(o.r.song||'제목 없음',p.x,p.y-R0-8)}}
+ // 플래그: 모든 뷰에서 항상 보이는 박동 표시(CSS 애니메이션). 현재 뷰에 점이 없으면 점도 함께 그린다
+ const FP=[];A.flags.forEach(id=>{const q=cen(id);if(q){const p=pj(q);FP.push({x:p.x,y:p.y,dot:!inV.has(id)})}});
+ const fl=$('#fl');while(fl.children.length>FP.length)fl.lastChild.remove();while(fl.children.length<FP.length)fl.insertAdjacentHTML('beforeend','<div class="fp"><i></i><b></b></div>');
+ FP.forEach((f,i)=>{const e=fl.children[i];e.style.transform=`translate(${f.x}px,${f.y}px)`;e.classList.toggle('dt',f.dot)});
  if(T<1)requestAnimationFrame(draw3d)}
 const near=e=>{const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;return(A.pts||[]).map(p=>({id:p.id,d:Math.hypot(p.x-x,p.y-y)})).filter(p=>p.d<10).sort((a,b)=>a.d-b.d)};
 function lh(){document.querySelectorAll('#side [data-hl]').forEach(b=>b.classList.toggle('lh',b.dataset.hl==A.hl))}
@@ -66,3 +70,22 @@ sd.addEventListener('mouseover',e=>{const b=e.target.closest('[data-hl]');if(b)s
 sd.addEventListener('mouseout',e=>{if(e.target.closest('[data-hl]')&&!(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('[data-hl]')))setHl(null)});
 sd.addEventListener('focusin',e=>{const b=e.target.closest('[data-hl]');if(b)setHl(b.dataset.hl)});sd.addEventListener('focusout',()=>setHl(null));
 function sel(id){A.sel=A.view=='album'?{k:id}:{s:id}}
+
+// ---- 자동 회전 / 기본 시점 복귀
+const RL=['정지','X축','Y축','Z축','전체'],RA=[null,[1,0,0],[0,1,0],[0,0,1]];
+let rt=0,rv=0,rraf=0;
+function rbtn(){const b=$('#rot'),m=A.rot.mode;b.textContent='⟳ '+RL[m];b.classList.toggle('on',m>0);b.setAttribute('aria-label','자동 회전: '+RL[m]+' (누르면 '+RL[(m+1)%5]+')')}
+// 가속·감속(rv)을 두어 시작과 정지가 부드럽다. 회전은 데이터 축 기준(q ⊗ r)이고 드래그 중에는 멈춘다
+function spin(now){rraf=0;const dt=Math.min(.05,(now-(rt||now))/1000);rt=now;rv+=((A.rot.mode?1:0)-rv)*Math.min(1,dt*5);
+ if(!(dn&&dn.m)&&!A.homing)A.qt=qn(qm(A.qt,qa(A.rot.ax||drift(now/1000),(A.rot.intro?.16:.5)*rv*dt)));
+ draw3d();if(A.rot.mode||rv>.01)rraf=requestAnimationFrame(spin);else rt=0}
+const spinKick=()=>{if(!rraf){rt=0;rraf=requestAnimationFrame(spin)}};
+function introOn(){if(A.rows.length)return;A.rot={mode:4,intro:1,ax:null};rbtn();if(!RM)spinKick()}
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function home(ms=900){A.rot.mode=0;A.rot.intro=0;rv=0;rbtn();
+ if(RM){A.cam={yaw:-.6,pit:.4,zm:1,px:0,py:0};A.qt=[1,0,0,0];draw3d();return}
+ const c0={...A.cam},q0=A.qt.slice(),sg=q0[0]<0?-1:1,t0=performance.now(),TP=2*Math.PI;A.homing=1;
+ const f=now=>{const k=Math.min(1,(now-t0)/ms),e=ease(k),L=(a,b)=>a+(b-a)*e,dy=(((-.6-c0.yaw+Math.PI)%TP)+TP)%TP-Math.PI;
+  A.cam={yaw:c0.yaw+dy*e,pit:L(c0.pit,.4),zm:L(c0.zm,1),px:L(c0.px||0,0),py:L(c0.py||0,0)};
+  A.qt=qn([L(sg*q0[0],1),L(sg*q0[1],0),L(sg*q0[2],0),L(sg*q0[3],0)]);draw3d();
+  if(k<1)requestAnimationFrame(f);else A.homing=0};requestAnimationFrame(f)}
