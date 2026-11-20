@@ -15,8 +15,9 @@ const ok=(r,x,y)=>r.m[x]!=null&&r.m[y]!=null,avg=a=>a.reduce((p,c)=>p+c,0)/a.len
 const artists=ts=>[...new Set(ts.map(t=>t.artist.trim()).filter(Boolean))];
 const hit=(s,q)=>s.toLowerCase().includes(q);
 function vis(){const q=A.q.trim().toLowerCase();
- if(A.view=='album')return B.G.filter(g=>!q||hit(g.al,q)||g.t.some(t=>hit(t.song,q)||hit(t.artist,q)));
- return B.S.filter(o=>!q||hit(o.r.song,q)||hit(o.r.artist,q))}
+ const fo=id=>!A.fo||A.flags.includes(id);
+ if(A.view=='album')return B.G.filter(g=>fo(g.key)&&(!q||hit(g.al,q)||g.t.some(t=>hit(t.song,q)||hit(t.artist,q))));
+ return B.S.filter(o=>fo(o.id)&&(!q||hit(o.r.song,q)||hit(o.r.artist,q)))}
 function hull(P){P=[...new Map(P.map(p=>[p+'',p])).values()].sort((a,b)=>a[0]-b[0]||a[1]-b[1]);if(P.length<3)return P;
  const X=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]),h=[];
  for(const p of P){while(h.length>1&&X(h[h.length-2],h[h.length-1],p)<=0)h.pop();h.push(p)}const n=h.length+1;
