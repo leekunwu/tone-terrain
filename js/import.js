@@ -11,4 +11,4 @@ function commit(m){const s=A.st;if(!s)return;const rows=s.good.flatMap(r=>r.rows
  if(s.proj){Object.assign(A,s.proj.view);A.rows=rows}else{if(m=='replace'){A.rows=rows;A.sel=null;A.cmp=[];A.flags=[];A.fo=false;A.sph=null;A.dom=null}else A.rows=A.rows.concat(rows)}
  A.pick=null;A.st=null;B=build(A.rows);
  const has=id=>B.G.some(g=>g.key==id)||B.S.some(o=>o.id==id);A.cmp=A.cmp.filter(has);A.flags=A.flags.filter(has);if(A.sph&&!has(A.sph.id))A.sph=null;
- if(A.sel&&!has(A.sel.k||A.sel.s))A.sel=null;A.anim=true;A.t0=performance.now();if(dlg.open)dlg.close();$('#q').value=A.q;render()}
+ if(A.sel&&!has(A.sel.k||A.sel.s))A.sel=null;home();A.anim=true;A.t0=performance.now();if(dlg.open)dlg.close();$('#q').value=A.q;render()}

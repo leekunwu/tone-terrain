@@ -3,22 +3,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="stylesheet" href="styles.css"></head><body><div id="app">
 <header><h1><button class="ttl" data-act="rst" aria-label="Tone Terrain — 클릭하면 전체 초기화"><span class="a">Tone Terrain</span><span class="b" aria-hidden="true">↺ 초기화</span></button></h1>
-<button id="add" class="p">파일 추가</button>
-<div class="seg" role="group" aria-label="보기"><button data-act="v" data-v="album">앨범</button><button data-act="v" data-v="song">곡</button></div>
-<label class="axl">X<select id="sx"></select></label><label class="axl">Y<select id="sy"></select></label><label class="axl">Z<select id="sz"></select></label>
-<button data-act="reset">전체 보기</button>
+<div class="grp"><button id="add" class="p">파일 추가</button><button data-act="proj">프로젝트</button></div>
+<div class="grp"><div class="seg" role="group" aria-label="보기"><button data-act="v" data-v="album">앨범</button><button data-act="v" data-v="song">곡</button></div>
+<div class="axs" role="group" aria-label="축"><label class="axl">X<select id="sx"></select></label><label class="axl">Y<select id="sy"></select></label><label class="axl">Z<select id="sz"></select></label></div></div>
+<div class="grp"><div class="seg" role="group" aria-label="시점"><button id="rot" data-act="rot" aria-label="자동 회전: 정지 (누르면 X축 회전)">회전</button><button data-act="reset" title="회전·이동·확대를 기본 시점으로 되돌립니다"><svg class="ri" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/></svg>중앙 정렬</button></div>
+<div class="seg" role="group" aria-label="GRID: 플래그 항목을 지나는 X·Y·Z 축선"><span class="sl"><svg class="ri" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h18v18H3zM9 3v18M15 3v18M3 9h18M3 15h18"/></svg>GRID</span><button data-act="ax" data-v="1" aria-pressed="true">ON</button><button data-act="ax" data-v="0" aria-pressed="false">OFF</button></div></div>
 <input type="search" id="q" placeholder="곡명·앨범명·Artist 검색" aria-label="검색">
 <span class="sp"></span>
-<a class="btn spot" href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a>
+<div class="grp"><a class="btn spot" href="https://open.spotify.com" target="_blank" rel="noopener noreferrer">Spotify</a>
 <a class="btn chos" href="https://www.chosic.com/spotify-playlist-exporter/" target="_blank" rel="noopener noreferrer">Chosic</a>
-<button data-act="proj">프로젝트</button><button data-act="help">도움말</button>
+<button data-act="help">도움말</button></div>
 <input type="file" id="fi" accept=".csv,text/csv" multiple hidden></header>
-<main><div id="mapw"><canvas id="map" tabindex="0" aria-label="Tone Terrain 3D 지도. 드래그로 회전, 휠로 확대, 방향키로 회전, Ctrl·Shift 드래그로 이동"></canvas><div id="tip"></div><div id="drop"></div></div>
+<main><div id="mapw"><canvas id="map" tabindex="0" aria-label="Tone Terrain 3D 지도. 드래그로 회전, 휠로 확대, 방향키로 회전, Ctrl·Shift 드래그로 이동"></canvas><div id="fl"></div><div id="tip"></div><div id="drop"></div></div>
 <div id="spl" role="separator" aria-orientation="vertical" aria-label="패널 폭 조절 (좌우 방향키, 더블클릭으로 초기화)" tabindex="0"></div><aside id="side"><div id="hd"></div><div id="bd"></div></aside></main></div><dialog id="dlg"></dialog>
 <script src="js/state.js"></script>
 <script src="js/csv.js"></script>
 <script src="js/data.js"></script>
 <script src="js/sphere.js"></script>
+<script src="js/rot.js"></script>
 <script src="js/map.js"></script>
 <script src="js/panel.js"></script>
 <script src="js/import.js"></script>
