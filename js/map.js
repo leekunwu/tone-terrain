@@ -74,7 +74,7 @@ function sel(id){A.sel=A.view=='album'?{k:id}:{s:id}}
 // ---- 자동 회전 / 기본 시점 복귀
 const RL=['정지','X축','Y축','Z축','전체'],RA=[null,[1,0,0],[0,1,0],[0,0,1]];
 let rt=0,rv=0,rraf=0;
-function rbtn(){const b=$('#rot'),m=A.rot.mode;b.textContent='⟳ '+RL[m];b.classList.toggle('on',m>0);b.setAttribute('aria-label','자동 회전: '+RL[m]+' (누르면 '+RL[(m+1)%5]+')')}
+function rbtn(){const b=$('#rot'),m=A.rot.mode;b.innerHTML=RI(m)+'<span>'+RL[m]+'</span>';b.classList.toggle('on',m>0);b.setAttribute('aria-label','자동 회전: '+RL[m]+' (누르면 '+RL[(m+1)%5]+')')}
 // 가속·감속(rv)을 두어 시작과 정지가 부드럽다. 회전은 데이터 축 기준(q ⊗ r)이고 드래그 중에는 멈춘다
 function spin(now){rraf=0;const dt=Math.min(.05,(now-(rt||now))/1000);rt=now;rv+=((A.rot.mode?1:0)-rv)*Math.min(1,dt*5);
  if(!(dn&&dn.m)&&!A.homing)A.qt=qn(qm(A.qt,qa(A.rot.ax||drift(now/1000),(A.rot.intro?.16:.5)*rv*dt)));

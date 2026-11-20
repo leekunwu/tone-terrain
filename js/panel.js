@@ -46,7 +46,7 @@ function history(){const ks=Object.keys(B.st);if(!ks.length)return'';
  ${B.ev.length?`<div class="sm"><b>충돌 (기존 값 유지)</b><table><tr><th>트랙/지표</th><th>유지</th><th>새 값</th></tr>${B.ev.slice(0,40).map(e=>`<tr><td>${esc(e.tid)} ${esc(e.k)}</td><td>${e.a??'결측'}</td><td>${e.b??'결측'}</td></tr>`).join('')}</table>${B.ev.length>40?'외 '+(B.ev.length-40)+'건':''}<div class="mu">${esc(B.ev[0].f)} 등 출처 파일 기준</div></div>`:''}</details>`}
 function render(){hxHide();const has=A.rows.length>0;$('#drop').innerHTML=has?'':'<h2>Tone Terrain</h2>'+GUIDE+'<div class="mu">CSV 파일을 여기에 놓거나</div><button class="p" data-act="pick">파일 선택</button>';
  ['x','y','z'].forEach(a=>{const e=$('#s'+a);e.innerHTML=M.map(k=>`<option>${esc(k)}</option>`).join('');e.value=A[a];[...e.options].forEach(o=>o.disabled=['x','y','z'].some(b=>b!=a&&A[b]==o.value))});
- {const ab=$('[data-act=ax]');ab.classList.toggle('on',A.ax);ab.setAttribute('aria-pressed',A.ax)}
+ document.querySelectorAll('[data-act=ax]').forEach(b=>{const on=(b.dataset.v=='1')==A.ax;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
  document.querySelectorAll('[data-act=v]').forEach(b=>{b.classList.toggle('on',b.dataset.v==A.view);b.setAttribute('aria-pressed',b.dataset.v==A.view)});
  if(A.hl&&!(B.G.some(g=>g.key==A.hl)||B.S.some(o=>o.id==A.hl)))A.hl=null;draw3d();const V=vis();let p='';
  if(has&&!A.nvalid&&!A.fo)p+=`<p>현재 축(${esc(A.x)} × ${esc(A.y)} × ${esc(A.z)})에 유효 데이터가 없습니다. 축을 바꾸거나 가져오기 내역을 확인하세요.</p>`;

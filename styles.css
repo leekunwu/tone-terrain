@@ -88,3 +88,14 @@ button.fl.on,button.sb.on{background:var(--acb);color:var(--ac)}
 .ic{flex:none;margin-right:5px;vertical-align:-2px}button.fl.on .ic,button.sb.on .ic{color:var(--ac)}
 #drop:not(:empty){backdrop-filter:blur(5px) brightness(.86);-webkit-backdrop-filter:blur(5px) brightness(.86);background:rgba(0,0,0,.06)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) #drop:not(:empty){backdrop-filter:blur(5px) brightness(.7);-webkit-backdrop-filter:blur(5px) brightness(.7)}}
+
+/* 헤더: 비슷한 기능끼리 묶음 */
+header{gap:10px 20px}.grp{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.axs{display:inline-flex;align-items:center;gap:2px;background:var(--bg2);border-radius:8px;padding:2px}.axs .axl{gap:3px;padding-left:8px}.axs select{background:none;height:32px;padding:0 4px}
+.seg .sl{display:inline-flex;align-items:center;gap:5px;padding:0 8px 0 10px;font-size:12px;font-weight:700;color:var(--mu)}
+.seg button{gap:6px}.seg button:hover{filter:none;background:color-mix(in srgb,var(--pn) 55%,transparent)}.seg button.on:hover{background:var(--pn)}
+.ri{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ri .f{fill:currentColor;stroke:none}.ri.rot{width:27px;height:27px}.ri .axl2{opacity:.5}
+#rot{min-width:96px;padding:0 12px 0 8px}#rot.on{color:var(--ac)}
+.seg button[data-act=ax].on{color:var(--ac)}
+@media(max-width:800px){header{padding:8px 12px;gap:8px 10px}.grp{gap:6px}.seg .sl{font-size:0;gap:0;padding:0 4px 0 8px}.axs .axl{padding-left:6px;gap:2px}.axs select{width:76px;padding:0 2px;font-size:12px}#rot{min-width:88px}}
