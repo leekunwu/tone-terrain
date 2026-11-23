@@ -50,7 +50,10 @@ function flagList(){const L=A.flags.map(id=>{const g=B.G.find(x=>x.key==id),o=g?
 function history(){const ks=Object.keys(B.st);if(!ks.length)return'';
  return`<details><summary>가져오기 내역</summary>${ks.map(f=>{const s=B.st[f],ex=Object.entries(s.ex);return`<p class="sm"><b>${esc(f)}</b><br>행 ${s.rows} · 앨범 반영 ${s.ok} · 중복 제외 ${s.dup} · 충돌 ${s.conf} · 무효 지표 ${s.bad}${ex.length?'<br>앨범 제외: '+ex.map(([k,n])=>esc(k)+' '+n).join(', '):''}</p>`}).join('')}
  ${B.ev.length?`<div class="sm"><b>충돌 (기존 값 유지)</b><table><tr><th>트랙/지표</th><th>유지</th><th>새 값</th></tr>${B.ev.slice(0,40).map(e=>`<tr><td>${esc(e.tid)} ${esc(e.k)}</td><td>${e.a??'결측'}</td><td>${e.b??'결측'}</td></tr>`).join('')}</table>${B.ev.length>40?'외 '+(B.ev.length-40)+'건':''}<div class="mu">${esc(B.ev[0].f)} 등 출처 파일 기준</div></div>`:''}</details>`}
-function render(){hxHide();const has=A.rows.length>0;$('#drop').innerHTML=has?'':'<h2>Tone Terrain</h2>'+GUIDE+'<div class="mu">CSV 파일을 여기에 놓거나</div><div class="drow"><button class="p" data-act="pick">파일 선택</button><button data-act="help">사용법 둘러보기</button></div>';
+function render(){hxHide();const has=A.rows.length>0;
+ document.querySelector('main').classList.toggle('nos',!has);$('#side').inert=!has;
+ {const ks=Object.keys(B.st),lg=$('#lg');lg.hidden=ks.length<2;lg.innerHTML=ks.map((f,i)=>`<span title="${esc(f)}"><i style="background:${i%6?`var(--s${i%6})`:'var(--dot)'}"></i>${esc(f.replace(/\.csv$/i,''))} <em>${B.st[f].rows}</em></span>`).join('')}
+ $('#drop').innerHTML=has?'':'<h2>Tone Terrain</h2>'+GUIDE+'<div class="mu">CSV 파일을 여기에 놓거나</div><div class="drow"><button class="p" data-act="pick">파일 선택</button><button data-act="help">사용법 둘러보기</button></div>';
  ['x','y','z'].forEach(a=>{const e=$('#s'+a);e.innerHTML=M.map(k=>`<option>${esc(k)}</option>`).join('');e.value=A[a];[...e.options].forEach(o=>o.disabled=['x','y','z'].some(b=>b!=a&&A[b]==o.value))});
  document.querySelectorAll('[data-act=ax]').forEach(b=>{const on=(b.dataset.v=='1')==A.ax;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
  document.querySelectorAll('[data-act=v]').forEach(b=>{b.classList.toggle('on',b.dataset.v==A.view);b.setAttribute('aria-pressed',b.dataset.v==A.view)});

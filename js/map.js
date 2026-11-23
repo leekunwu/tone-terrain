@@ -23,8 +23,8 @@ function draw3d(){if(!A.w)size();const c=g2,d=A.d;c.setTransform(d,0,0,d,0,0);c.
   c.fillStyle=tx;c.font='700 12px '+ff;c.fillText(['X','Y','Z'][i]+' '+k,t.x,t.y);c.fillStyle=mu;c.font='11px '+ff;c.fillText(dm[0]+'–'+dm[1],t.x,t.y+14)});
  const V=vis(),[kx,ky,kz]=AK(),T=!A.t0||RM?1:Math.min(1,(performance.now()-A.t0)/800),it=[];
  const okk=r=>r.m[kx]!=null&&r.m[ky]!=null&&r.m[kz]!=null,P3=r=>[nm(kx,r.m[kx]),nm(ky,r.m[ky]),nm(kz,r.m[kz])],alb=A.view=='album';
- if(alb)V.forEach(g=>{const S=g.t.filter(okk);if(S.length){const Q=S.map(P3);it.push({id:g.key,rp:pj([0,1,2].map(i=>avg(Q.map(q=>q[i])))),S:Q.map(pj)})}});
- else V.forEach(o=>{if(okk(o.r))it.push({id:o.id,rp:pj(P3(o.r)),S:[]})});
+ if(alb)V.forEach(g=>{const S=g.t.filter(okk);if(S.length){const Q=S.map(P3);it.push({id:g.key,f:g.t[0].f,rp:pj([0,1,2].map(i=>avg(Q.map(q=>q[i])))),S:Q.map(pj)})}});
+ else V.forEach(o=>{if(okk(o.r))it.push({id:o.id,f:o.r.f,rp:pj(P3(o.r)),S:[]})});
  A.nvalid=it.length;A.pts=[];const FS=new Set(A.flags);it.sort((a,b)=>(FS.has(a.id)-FS.has(b.id))||a.rp.z-b.rp.z); // 플래그 항목은 맨 위에 그린다
  const SC=A.sph&&cen(A.sph.id),IN=SC&&new Set(sphIn().map(o=>o.id)),inV=new Set(it.map(o=>o.id));
  if(SC){const p=pj(SC),R=(1-A.sph.r/100)*DM*Math.min(A.w,A.h)*.3*p.f;c.fillStyle=ac;c.globalAlpha=.08;c.beginPath();c.arc(p.x,p.y,R,0,7);c.fill();
@@ -33,7 +33,8 @@ function draw3d(){if(!A.w)size();const c=g2,d=A.d;c.setTransform(d,0,0,d,0,0);c.
   c.globalAlpha=1;c.fillStyle=tx;c.font='700 11px '+ff;c.textAlign='center';c.fillText('유사도 '+A.sph.r+'% 이상 · '+IN.size,p.x,p.y-R-6)}
  if(A.ax){c.strokeStyle=ac;c.lineWidth=1;c.globalAlpha=.22;c.setLineDash([3,4]);A.flags.forEach(id=>{const q=cen(id);if(q)[0,1,2].forEach(i=>{const a=[...q],b=[...q];a[i]=-1;b[i]=1;const s=pj(a),e=pj(b);c.beginPath();c.moveTo(s.x,s.y);c.lineTo(e.x,e.y);c.stroke()})});c.setLineDash([]);c.globalAlpha=1}
  const ra=Math.min(1,T/.35),sa=Math.min(1,Math.max(0,(T-.3)/.4));
- const hv=A.hl&&it.some(o=>o.id==A.hl);it.forEach(o=>{const sl=A.sel&&(A.sel.k==o.id||A.sel.s==o.id||A.sel.from==o.id),h=A.hl==o.id,ci=A.cmp.indexOf(o.id)+1,fg=A.flags.includes(o.id),dim=(hv&&!h&&!sl&&!fg)||(IN&&!IN.has(o.id)&&o.id!=A.sph.id&&!h&&!sl&&!fg),col=ci?CC[ci]:sl||h||fg?ac:dot,al=dim?.2:1;
+ const SCL=[dot,cs('--s1'),cs('--s2'),cs('--s3'),cs('--s4'),cs('--s5')];
+ const hv=A.hl&&it.some(o=>o.id==A.hl);it.forEach(o=>{const sl=A.sel&&(A.sel.k==o.id||A.sel.s==o.id||A.sel.from==o.id),h=A.hl==o.id,ci=A.cmp.indexOf(o.id)+1,fg=A.flags.includes(o.id),dim=(hv&&!h&&!sl&&!fg)||(IN&&!IN.has(o.id)&&o.id!=A.sph.id&&!h&&!sl&&!fg),col=ci?CC[ci]:sl||h||fg?ac:SCL[(B.fi[o.f]||0)%6],al=dim?.2:1;
   if(o.S.length&&(sl||h||ci)){c.strokeStyle=col;c.lineWidth=1;c.globalAlpha=.35*sa;c.beginPath();o.S.forEach(s=>{c.moveTo(o.rp.x,o.rp.y);c.lineTo(s.x,s.y)});c.stroke()}
   c.fillStyle=col;c.globalAlpha=.75*al*sa;o.S.forEach(s=>{c.beginPath();c.arc(s.x,s.y,2.6*s.f,0,7);c.fill()});
   c.globalAlpha=al*ra;const r=(alb?6.5:5)*o.rp.f;c.beginPath();c.arc(o.rp.x,o.rp.y,r,0,7);c.fill();c.strokeStyle=bg;c.lineWidth=1.5;c.stroke();

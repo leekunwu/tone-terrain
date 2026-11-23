@@ -9,7 +9,8 @@ function build(rows){const G=new Map(),S=new Map(),st={},ev=[];
   else{const key=JSON.stringify([al,d]);let g=G.get(key);if(!g)G.set(key,g={key,al:r.album.trim(),date:d,t:[],ids:new Set()});
    if(r.tid&&g.ids.has(r.tid))s.dup++;else{g.t.push(r);if(r.tid)g.ids.add(r.tid);s.ok++}}
   if(r.tid){if(!prev)S.set(r.tid,r)}else S.set('#'+r.f+':'+r.r,r)});
- return{G:[...G.values()],S:[...S.entries()].map(([id,r])=>({id,r})),st,ev}}
+ const fi={};Object.keys(st).forEach((f,i)=>fi[f]=i);
+ return{G:[...G.values()],S:[...S.entries()].map(([id,r])=>({id,r})),st,ev,fi}}
 let B=build([]);
 const ok=(r,x,y)=>r.m[x]!=null&&r.m[y]!=null,avg=a=>a.reduce((p,c)=>p+c,0)/a.length;
 const artists=ts=>[...new Set(ts.map(t=>t.artist.trim()).filter(Boolean))];
