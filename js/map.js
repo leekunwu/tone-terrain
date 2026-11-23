@@ -47,6 +47,7 @@ function draw3d(){if(!A.w)size();const c=g2,d=A.d;c.setTransform(d,0,0,d,0,0);c.
  const FP=[];A.flags.forEach(id=>{const q=cen(id);if(q){const p=pj(q);FP.push({x:p.x,y:p.y,dot:!inV.has(id)})}});
  const fl=$('#fl');while(fl.children.length>FP.length)fl.lastChild.remove();while(fl.children.length<FP.length)fl.insertAdjacentHTML('beforeend','<div class="fp"><i></i><b></b></div>');
  FP.forEach((f,i)=>{const e=fl.children[i];e.style.transform=`translate(${f.x}px,${f.y}px)`;e.classList.toggle('dt',f.dot)});
+ const pe=$('#pp'),pc=A.play&&cen(A.play.id);if(pc){const p=pj(pc);pe.style.transform=`translate(${p.x}px,${p.y}px)`;pe.hidden=false}else pe.hidden=true
  if(T<1)requestAnimationFrame(draw3d)}
 const near=e=>{const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;return(A.pts||[]).map(p=>({id:p.id,d:Math.hypot(p.x-x,p.y-y)})).filter(p=>p.d<10).sort((a,b)=>a.d-b.d)};
 function lh(){document.querySelectorAll('#side [data-hl]').forEach(b=>b.classList.toggle('lh',b.dataset.hl==A.hl))}

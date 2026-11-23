@@ -8,7 +8,7 @@ async function stage(files,proj){const R=proj?[proj]:await Promise.all([...files
  modal(`<b>${proj?'프로젝트 불러오기':'가져오기'}</b><ul>${list}</ul><p class="sm">반영 대상 ${n}행${cur?` · 전체 교체 시 현재 ${A.rows.length}행·앨범 ${B.G.length}개 제거`:''}</p>
  <div class="bt"><button data-act="x">취소</button>${cur&&!proj?'<button data-act="c" data-m="add">추가</button>':''}<button class="p" data-act="c" data-m="replace">${cur?'전체 교체':'반영'}</button></div>`)}
 function commit(m){const s=A.st;if(!s)return;const rows=s.good.flatMap(r=>r.rows);
- if(s.proj){Object.assign(A,s.proj.view);A.rows=rows}else{if(m=='replace'){A.rows=rows;A.sel=null;A.cmp=[];A.flags=[];A.fo=false;A.sph=null;A.dom=null}else A.rows=A.rows.concat(rows)}
+ if(s.proj){Object.assign(A,s.proj.view);A.rows=rows}else{if(m=='replace'){plStop();A.rows=rows;A.sel=null;A.cmp=[];A.flags=[];A.fo=false;A.sph=null;A.dom=null}else A.rows=A.rows.concat(rows)}
  A.pick=null;A.st=null;B=build(A.rows);
  const has=id=>B.G.some(g=>g.key==id)||B.S.some(o=>o.id==id);A.cmp=A.cmp.filter(has);A.flags=A.flags.filter(has);if(A.sph&&!has(A.sph.id))A.sph=null;
  if(A.sel&&!has(A.sel.k||A.sel.s))A.sel=null;home();A.anim=true;A.t0=performance.now();if(dlg.open)dlg.close();$('#q').value=A.q;render()}

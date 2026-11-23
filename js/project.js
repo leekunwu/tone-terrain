@@ -1,6 +1,6 @@
 // ---- 프로젝트
 function save(){return JSON.stringify({format:'tone-terrain-project',version:1,rows:A.rows,view:{view:A.view,x:A.x,y:A.y,z:A.z,q:A.q,sel:A.sel,cmp:A.cmp,flags:A.flags,fo:A.fo,sph:A.sph,ax:A.ax}})}
-function resetAll(){Object.assign(A,A0());B=build([]);$('#q').value='';if(dlg.open)dlg.close();rv=0;render();introOn()}
+function resetAll(){Object.assign(A,A0());B=build([]);$('#q').value='';if(dlg.open)dlg.close();rv=0;plStop();render();introOn()}
 function load(t){try{const o=JSON.parse(t);if(o.format!='tone-terrain-project')throw'프로젝트 파일이 아님';if(o.version!==1)throw'지원하지 않는 버전: '+esc(o.version);
  const S=v=>typeof v=='string'?v:'',SA=v=>Array.isArray(v)?v.filter(x=>typeof x=='string'):[],rows=(Array.isArray(o.rows)?o.rows:(()=>{throw'rows 형식 오류'})()).map(r=>{const m={},bad=Array.isArray(r.bad)?r.bad.filter(k=>M.includes(k)):[];M.forEach(k=>m[k]=typeof r.m?.[k]=='number'&&isFinite(r.m[k])?r.m[k]:null);
   return{f:S(r.f),r:+r.r||0,tid:S(r.tid),song:S(r.song),artist:S(r.artist),album:S(r.album),date:S(r.date),m,bad,label:S(r.label),genres:S(r.genres)}}),v=o.view||{};
