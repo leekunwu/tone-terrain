@@ -13,3 +13,4 @@ const RI=m=>`<svg class="ri rot" viewBox="0 0 24 24" aria-hidden="true">${[
  '<path class="axl2" d="M12 1.5v21"/><ellipse cx="12" cy="12" rx="8.8" ry="4.6"/><path class="f" d="M20.8 15.4l2.3-3.6h-4.6z"/>',
  '<circle cx="12" cy="12" r="8"/><circle class="f" cx="12" cy="12" r="2"/><path class="f" d="M20 15.4l2.3-3.6h-4.6z"/>',
  '<ellipse cx="12" cy="12" rx="9" ry="3.8"/><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(120 12 12)"/><circle class="f" cx="12" cy="12" r="1.7"/>'][m]}</svg>`;
+const sid=r=>{const id=(r.tid||'').split(':').pop();return/^[A-Za-z0-9]{22}$/.test(id)?id:null};
